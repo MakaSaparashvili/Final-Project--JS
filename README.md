@@ -1,4 +1,4 @@
-Project Name: Javaskript Module 
+Project Name: Javascript Module 
 
 Design: Nike Website
 
