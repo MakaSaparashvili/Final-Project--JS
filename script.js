@@ -21,6 +21,7 @@ function handleScroll() {
 window.addEventListener('scroll', handleScroll);
 
 // პროდუქტების გვერდი
+// პროდუქტების მონაცემების ჩატვირთვა data.json ფაილიდან
 const productsContainer = document.getElementById("product-container");
 const paginationContainer = document.getElementById("pagination");
 const productsPerPage = 6;
@@ -33,7 +34,7 @@ async function fetchProducts() {
     const response = await fetch('data.json');
     const data = await response.json();
     allProducts = data;
-    renderProducts(currentPage);
+    renderProducts(currentPage); // ამჟამინდელი გვერდის პროდუქტების ჩვენება
     renderPagination();
   } catch (error) {
     if (productsContainer) {
@@ -43,7 +44,7 @@ async function fetchProducts() {
   }
 }
 
-
+// კონკრეტული გვერდის პროდუქტების რენდერი
 function renderProducts(page) {
   if (!productsContainer) return;
 
@@ -52,6 +53,7 @@ function renderProducts(page) {
   const endIndex = startIndex + productsPerPage;
   const currentProducts = allProducts.slice(startIndex, endIndex);
 
+  // თითოეულ პროდუქტზე ქარდის შექმნა
   currentProducts.forEach(product => {
     const card = document.createElement('div');
     card.classList.add('col');
@@ -89,7 +91,7 @@ function renderPagination() {
     const link = document.createElement("a");
     link.classList.add("page-link");
     link.href = "#";
-    link.textContent = i;
+    link.textContent = i; // გვერდის ნომერი ღილაკზე ტექსტად
 
     link.addEventListener("click", (e) => {
       e.preventDefault();
@@ -102,15 +104,15 @@ function renderPagination() {
 
       document.getElementById("product-container").scrollIntoView({
         behavior: "smooth"
-      });
+      }); // სმუზლი გადასვლა
     });
 
-    listItem.appendChild(link);
-    paginationContainer.appendChild(listItem);
+    listItem.appendChild(link);  // ღილაკი ჩამატებულია <li> ელემენტში
+    paginationContainer.appendChild(listItem);  // ღილაკი ჩამატებულია <li> ელემენტში
   }
 }
 
-// PRODUCT.HTML – პროდუქტის დეტალების ჩატვირთვა
+// PRODUCT.HTML-ში პროდუქტის დეტალების ჩატვირთვა
 async function loadProductDetails() {
   const urlParams = new URLSearchParams(window.location.search);
   const productId = urlParams.get("id");
@@ -124,7 +126,7 @@ async function loadProductDetails() {
     const response = await fetch("data.json");
     const data = await response.json();
 
-    const product = data.find(p => p.id === Number(productId));
+    const product = data.find(p => p.id === Number(productId)); // შესაბამისი პროდუქტის მოძებნა
 
     if (product) {
       document.getElementById("product-image").src = product.imageUrl;
@@ -150,9 +152,56 @@ if (window.location.pathname.includes("product.html")) {
   loadProductDetails();
 }
 
-// აქამდე სწორიააა!!
 
 
+// // ჰედერის ცალკე ჩატვირთვა და საძიებო ველის ფუნქციონალი
+fetch("header.html")
+  .then(res => res.text())
+  .then(datas => {
+    document.getElementById("main-header").innerHTML = datas;
 
+// როდესაც ჰედერი ჩაიტვირთება, ვპოულობთ საძიებო ველს
+  
+  const searchInput = document.querySelector("[data-search]");
+  if (!searchInput) return;
 
+  searchInput.addEventListener("input", e => {
+    const value = e.target.value.toLowerCase(); 
 
+    const filteredProducts = allProducts.filter(product =>
+      product.Title.toLowerCase().includes(value) ||
+      product.shortdescription.toLowerCase().includes(value) ||
+      product.category.toLowerCase().includes(value)
+    );
+
+    renderFilteredProducts(filteredProducts);
+  });
+});
+
+// ძებნის შედეგად გაფილტრული პროდუქტების ჩვენება
+function renderFilteredProducts(products) {
+  if (!productsContainer) return;
+
+  productsContainer.innerHTML = "";
+
+  products.forEach(product => {
+    const card = document.createElement('div');
+    card.classList.add('col');
+    card.innerHTML = `
+      <a href="product.html?id=${product.id}" class="text-decoration-none text-dark">
+        <div class="card h-100">
+          <img src="${product.imageUrl}" alt="${product.Title}" class="card-img-top">
+          <div class="card-body">
+            <h5 class="card-title">${product.Title}</h5>
+            <p class="card-text">${product.shortdescription}</p>
+            <p class="card-text fw-bold">$${product.price}</p>
+          </div>
+          <div class="card-footer">
+            <small class="text-muted">${product.category}</small>
+          </div>
+        </div>
+      </a>
+    `;
+    productsContainer.appendChild(card);
+  });
+}
