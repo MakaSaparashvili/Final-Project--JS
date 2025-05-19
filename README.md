@@ -20,14 +20,14 @@ Technologies Used:
 -JSON for local product data
 
 File Structure
-├── index.html              // Main product listing page
-├── product.html            // Product detail page
-├── header.html             // Static header included via JavaScript
-├── footer.html             // Static footer included via JavaScript
-├── data.json               // Product data source
-├── script.js               // All JavaScript logic
-├── /CSS/                   // reset css and style css
-└── /assets/                // Images
+-index.html              // Main product listing page
+-product.html            // Product detail page
+-header.html             // Static header included via JavaScript
+-footer.html             // Static footer included via JavaScript
+-data.json               // Product data source
+-script.js               // All JavaScript logic
+-/CSS/                   // reset css and style css
+-/assets/                // Images
 
 Responsive:
 Responsive is done for minimum tablet resolution (1080px) to maximum desktop HD resolution (1920px).
