@@ -1,6 +1,7 @@
 Project Name: Javascript Module 
 
 Design: Nike Website
+Website: https://final-project-js-lilac.vercel.app/
 
 Description:
 This is a simple and partialy responsive web page for displaying and browsing a list of products using HTML, CSS + (Bootstrap), and JavaScript. It loads product data dynamically from a data.json file and provides a user-friendly interface with pagination, product details, and real-time search functionality.
